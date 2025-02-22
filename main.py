@@ -37,8 +37,8 @@ xgb_model = xgb.XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, 
 xgb_model.fit(X_train, y_train)
 xgb_preds = xgb_model.predict(X_test)
 
-# Evaluate Models
 def evaluate_model(y_true, y_pred):
+    """ Returns a dictionary of evaluation metrics for a model. """
     return {
         "Accuracy": accuracy_score(y_true, y_pred),
         "Precision": precision_score(y_true, y_pred),
@@ -46,9 +46,25 @@ def evaluate_model(y_true, y_pred):
         "F1 Score": f1_score(y_true, y_pred),
     }
 
+# Evaluate models
 rf_metrics = evaluate_model(y_test, rf_preds)
 xgb_metrics = evaluate_model(y_test, xgb_preds)
 
-# Compare Models
-print("Random Forest Metrics:", rf_metrics)
-print("XGBoost Metrics:", xgb_metrics)
+# Convert results to DataFrame
+df_metrics = pd.DataFrame({
+    "Metric": ["Accuracy", "Precision", "Recall", "F1 Score"],
+    "Random Forest": [rf_metrics["Accuracy"], rf_metrics["Precision"], rf_metrics["Recall"], rf_metrics["F1 Score"]],
+    "XGBoost": [xgb_metrics["Accuracy"], xgb_metrics["Precision"], xgb_metrics["Recall"], xgb_metrics["F1 Score"]],
+})
+
+# Print results in tabular format
+print("\nModel Performance Comparison:\n")
+print(df_metrics.to_string(index=False))
+
+# Save Best Model
+if xgb_metrics["Accuracy"] > rf_metrics["Accuracy"]:
+    print("XGBoost is the best model. Saving as xgb_titanic_model.pkl")
+    joblib.dump(xgb_model, "xgb_titanic_model.pkl")
+else:
+    print("Random Forest is the best model. Saving as rf_titanic_model.pkl")
+    joblib.dump(rf_model, "rf_titanic_model.pkl")
