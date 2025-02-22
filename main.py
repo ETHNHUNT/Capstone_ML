@@ -36,3 +36,19 @@ rf_preds = rf_model.predict(X_test)
 xgb_model = xgb.XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42)
 xgb_model.fit(X_train, y_train)
 xgb_preds = xgb_model.predict(X_test)
+
+# Evaluate Models
+def evaluate_model(y_true, y_pred):
+    return {
+        "Accuracy": accuracy_score(y_true, y_pred),
+        "Precision": precision_score(y_true, y_pred),
+        "Recall": recall_score(y_true, y_pred),
+        "F1 Score": f1_score(y_true, y_pred),
+    }
+
+rf_metrics = evaluate_model(y_test, rf_preds)
+xgb_metrics = evaluate_model(y_test, xgb_preds)
+
+# Compare Models
+print("Random Forest Metrics:", rf_metrics)
+print("XGBoost Metrics:", xgb_metrics)
