@@ -15,8 +15,8 @@ features = ["Pclass", "Sex", "Age", "Fare", "SibSp", "Parch", "Embarked"]
 df = df[features + ["Survived"]]
 
 # Handle missing values
-df["Age"].fillna(df["Age"].median(), inplace=True)
-df["Embarked"].fillna("S", inplace=True)
+df = df.assign(Age=df["Age"].fillna(df["Age"].median()))
+df = df.assign(Embarked=df["Embarked"].fillna("S"))
 
 # Encode categorical variables
 df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
