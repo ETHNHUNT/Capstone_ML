@@ -27,3 +27,12 @@ X = df.drop(columns=["Survived"])
 y = df["Survived"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Train Random Forest
+rf_model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
+rf_model.fit(X_train, y_train)
+rf_preds = rf_model.predict(X_test)
+
+# Train XGBoost Model
+xgb_model = xgb.XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42)
+xgb_model.fit(X_train, y_train)
+xgb_preds = xgb_model.predict(X_test)
