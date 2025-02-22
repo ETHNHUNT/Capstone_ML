@@ -9,3 +9,21 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 # Load Titanic dataset
 url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 df = pd.read_csv(url)
+
+#Select relevant features
+features = ["Pclass", "Sex", "Age", "Fare", "SibSp", "Parch", "Embarked"]
+df = df[features + ["Survived"]]
+
+# Handle missing values
+df["Age"].fillna(df["Age"].median(), inplace=True)
+df["Embarked"].fillna("S", inplace=True)
+
+# Encode categorical variables
+df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
+df["Embarked"] = df["Embarked"].map({"S": 0, "C": 1, "Q": 2})
+
+# Train-Test Split
+X = df.drop(columns=["Survived"])
+y = df["Survived"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
